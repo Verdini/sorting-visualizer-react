@@ -1,2 +1,3 @@
-# sorting-visualizer-react
-Sorting visualization app written in react.
+# Sorting visualizer app
+
+A sorting algorithm visualization app written in react.
