@@ -1,9 +1,12 @@
 import React from 'react';
+import Navbar from './Navbar';
+import Stage from './Stage';
 
 function App() {
   return (
     <div className="App">
-      <h1>App runing</h1>
+      <Navbar />
+      <Stage />
     </div>
   );
 }
