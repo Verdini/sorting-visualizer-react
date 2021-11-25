@@ -13,7 +13,7 @@ class Stage extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
-        array: [1, 2, 3, 4]
+        array: Array.from({length: 40}, () => ~~(1 + Math.random() * 100))
     };
   }
 
@@ -24,8 +24,13 @@ class Stage extends React.Component<IProps, IState> {
   render() {
     return(
         <div id="container">
-            {this.state.array.map( (el) => 
-                <div>{el}</div>
+            {this.state.array.map( (el: any, index) => 
+                <div 
+                  className="arrayElement" 
+                  key={index}
+                  style={ { height: `${el*5}px` } } >
+                  {el}
+                </div>
             )}
         </div>
     );
