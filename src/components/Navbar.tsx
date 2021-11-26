@@ -1,12 +1,17 @@
 import React from "react";
 import './Navbar.css'
 
-interface NavbarPropType {
-
+interface IProps  {
+  resetArray: any,
+  sortArray: any
 }
 
-class Navbar extends React.Component {
-  constructor(props: NavbarPropType) {
+interface IState {
+    
+}
+
+class Navbar extends React.Component<IProps, IState> {
+  constructor(props: IProps) {
     super(props);
     
   }
@@ -15,17 +20,25 @@ class Navbar extends React.Component {
     
   }
 
+
   render() {
     return (
         <div id="navbar">
-            <div>Change colleciton size</div>
-            <input type="range" min="0" max="100"/>
-            <button>Generate new collection</button>
-            <button>Bubble Sort</button>
-            <button>Heap Sort</button>
-            <button>Merge Sort</button>
-            <button>Quick Sort</button>
-            <button>Start Sorting</button>
+            <div style={{ display: "inline-block"} }>
+              <label>Colleciton size: </label>
+              <input type="range" min="0" max="100"/>
+            </div>
+            <button className="button" role="button" onClick={this.props.resetArray}>Generate new collection</button>
+            <div  style={{ display: "inline-block"} }>
+              <label>Select algorithm: </label>
+              <select className="select-dropdown">
+                <option>Bubble Sort</option>
+                <option>Heap Sort</option>
+                <option>Merge Sort</option>
+                <option>Quick Sort</option>
+              </select>
+            </div>
+            <button className="button" role="button" onClick={this.props.sortArray}>Start Sorting</button>
         </div>
     );
 
