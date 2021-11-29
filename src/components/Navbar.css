@@ -11,6 +11,17 @@
     gap: 2rem;
 }
 
+@media screen and (max-width: 940px) {
+  #navbar {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+    padding: 10px;
+  }
+}
 
 .button {
     appearance: none;
