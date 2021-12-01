@@ -53,7 +53,7 @@ class Navbar extends React.Component<IProps, IState> {
             </div>
             <div style={{ display: "inline-block"} }>
               <label>Speed: </label>
-              <input type="range" min="10" max="1000" value={this.state.speed} onChange={this.handleSpeedChange}/>
+              <input type="range" min="1" max="100" value={this.state.speed} onChange={this.handleSpeedChange}/>
             </div>
             <button className="button" onClick={() => this.props.sortArray(this.state.speed, this.state.algorithm)}>Start Sorting</button>
         </div>

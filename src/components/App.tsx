@@ -1,7 +1,8 @@
 import React from 'react';
 import Navbar from './Navbar';
 import Stage from './Stage';
-import BubbleSort from '../algorithms/bubblesort';
+import WorkerBuilder from '../utils/WorkerBuilder';
+import WebWorker from '../utils/WebWorker';
 
 
 interface IProps  {
@@ -27,9 +28,9 @@ class App extends React.Component<IProps, IState> {
     };
   }
 
-  onStateChange = async (array: number[], compareElements: number[]) => {
-    this.setState({ array, compareElements });
-  }
+  // onStateChange = async (array: number[], compareElements: number[]) => {
+  //   this.setState({ array, compareElements });
+  // }
   
   resetArray = (size: number) => {
     this.setState({
@@ -40,8 +41,14 @@ class App extends React.Component<IProps, IState> {
 
 
   sort = async (speed: number, algorithm: string) => {
-    console.log(algorithm + " Sort!");
-    await BubbleSort(this.state.array, speed, this.onStateChange );
+
+    var worker = new WorkerBuilder(WebWorker);
+    worker.onmessage = (event: any) => {
+      this.setState({ array: event.data.array, compareElements: event.data.compareElements });
+    }
+    worker.postMessage({cmd: 'start', algorithm: algorithm, speed: speed, array: this.state.array });
+    //console.log(algorithm + " Sort!");
+    //await BubbleSort(this.state.array, delay, this.onStateChange );
   }
 
 
