@@ -8,7 +8,8 @@ interface IProps  {
 
 interface IState {
     arraySize: number,
-    algorithm: string
+    algorithm: string,
+    speed: number
 }
 
 class Navbar extends React.Component<IProps, IState> {
@@ -16,16 +17,21 @@ class Navbar extends React.Component<IProps, IState> {
     super(props);
     this.state = {
       arraySize: this.props.sortArray.length,
-      algorithm: 'BubbleSort'
+      algorithm: 'BubbleSort',
+      speed: 10
     }
   }
 
   handleSizeChange = (event: React.FormEvent<HTMLInputElement>) => {
     this.setState({ ...this.state, arraySize: Number(event.currentTarget.value)});
   }
-
+  
   handleAlgorithmChange = (event: React.FormEvent<HTMLSelectElement>) => {
     this.setState({ ...this.state, algorithm: event.currentTarget.value});
+  }
+
+  handleSpeedChange = (event: React.FormEvent<HTMLInputElement>) => {
+    this.setState({ ...this.state, speed: Number(event.currentTarget.value)});
   }
 
   render() {
@@ -35,8 +41,8 @@ class Navbar extends React.Component<IProps, IState> {
               <label>Colleciton size: </label>
               <input type="range" min="2" max="150" value={this.state.arraySize} onChange={this.handleSizeChange}/>
             </div>
-            <button className="button" role="button" onClick={() => this.props.resetArray(this.state.arraySize)}>Generate new collection</button>
-            <div  style={{ display: "inline-block"} }>
+            <button className="button" onClick={() => this.props.resetArray(this.state.arraySize)}>Generate new collection</button>
+            <div style={{ display: "inline-block"} }>
               <label>Select algorithm: </label>
               <select className="select-dropdown" value={this.state.algorithm} onChange={this.handleAlgorithmChange}>
                 <option value="BubbleSort">Bubble Sort</option>
@@ -45,7 +51,11 @@ class Navbar extends React.Component<IProps, IState> {
                 <option value="QuickSort">Quick Sort</option>
               </select>
             </div>
-            <button className="button" role="button" onClick={() => this.props.sortArray(this.state.algorithm)}>Start Sorting</button>
+            <div style={{ display: "inline-block"} }>
+              <label>Speed: </label>
+              <input type="range" min="10" max="1000" value={this.state.speed} onChange={this.handleSpeedChange}/>
+            </div>
+            <button className="button" onClick={() => this.props.sortArray(this.state.speed, this.state.algorithm)}>Start Sorting</button>
         </div>
     );
 

@@ -2,7 +2,8 @@ import React from "react";
 import './Stage.css'
 
 interface IProps  {
-  arrayData: Number[]
+  arrayData: Number[],
+  compareElements: Number[]
 }
 
 interface IState {
@@ -35,10 +36,9 @@ class Stage extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { innerWidth: width, innerHeight: height } = window;
-    console.log("Width: " + width);
     const elemWidth = `${this.state.width/(this.props.arrayData.length)/2}px`;
     const bgColor = '#189AB4';
+    const bgColorComp = "#05445E";
 
     return(
         <div id="container">
@@ -51,7 +51,7 @@ class Stage extends React.Component<IProps, IState> {
                     width: elemWidth, 
                     marginLeft: '2px', 
                     marginRight: '2px',
-                    backgroundColor: bgColor,
+                    backgroundColor: ( index === this.props.compareElements[0] || index === this.props.compareElements[1] ? bgColorComp: bgColor),
                     fontSize: '4px'  } } >
                   {el}
                 </div>
