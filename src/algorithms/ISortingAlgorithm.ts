@@ -1,4 +1,4 @@
-export default interface ISorting {
+export default interface ISortingAlgorithm {
     run: boolean;
     delay: number;
     start: (array: number[], delay: number, onStateChange: (array: number[], compareElements: number[]) => void) => void;

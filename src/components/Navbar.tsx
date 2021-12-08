@@ -1,5 +1,5 @@
 import React from "react";
-import {SortingContext, SortingContextType} from '../contexts/SortingContext';
+import {SortingContext} from '../contexts/SortingContext';
 import './Navbar.css'
 
 interface IProps  {
@@ -44,7 +44,7 @@ class Navbar extends React.Component<IProps, IState> {
     this.context.setSortingDelay(delay);
   }
 
-  handleSort = () => {
+  handleSort = async () => {
     this.context.startStop();  
   }
 
@@ -53,12 +53,12 @@ class Navbar extends React.Component<IProps, IState> {
         <div id="navbar">
             <div style={{ display: "inline-block"} }>
               <label>Colleciton size: </label>
-              <input type="range" min="2" max="150" value={this.state.arraySize} onChange={this.handleSizeChange}/>
+              <input type="range" min="5" max="100" value={this.state.arraySize} onChange={this.handleSizeChange}/>
             </div>
             <button className="button" onClick={this.handleResetArray}>Generate new collection</button>
             <div style={{ display: "inline-block"} }>
               <label>Select algorithm: </label>
-              <select className="select-dropdown" value={this.context.sorting.algorithm} onChange={this.handleAlgorithmChange}>
+              <select className="select-dropdown" value={this.context.status.algorithm} onChange={this.handleAlgorithmChange}>
                 <option value="BubbleSort">Bubble Sort</option>
                 <option value="HeapSort">Heap Sort</option>
                 <option value="MergeSort">Merge Sort</option>
@@ -69,7 +69,7 @@ class Navbar extends React.Component<IProps, IState> {
               <label>Speed: </label>
               <input type="range" min="1" max="100" value={this.state.speed} onChange={this.handleSpeedChange}/>
             </div>
-            <button className="button" onClick={this.handleSort}>{this.context.sorting.running? 'Stop' : 'Start Sorting' }</button>
+            <button className="button" onClick={this.handleSort}>{this.context.status.running? 'Stop Sorting' : 'Start Sorting' }</button>
         </div>
     );
 

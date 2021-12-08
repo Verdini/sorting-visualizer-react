@@ -1,8 +1,8 @@
-import { timeStamp } from 'console';
 import Sleep from '../utils/Sleep';
+import ISortingAlgorithm from './ISortingAlgorithm';
 
 
-export default class BubbleSort {
+export default class BubbleSort implements ISortingAlgorithm {
 
     run: boolean;
     delay: number;
@@ -16,6 +16,7 @@ export default class BubbleSort {
         let sArray = [...array];
         var length = sArray.length;
         this.delay = delay;  
+        console.log("Start");
 
         outsideLoop:
         for (var i = 0; i < length; i++) { 
@@ -37,13 +38,19 @@ export default class BubbleSort {
         }
         await Sleep(this.delay);
         onStateChange( sArray, [-1, -1] );
+        // while(this.run === true) {
+        //     console.log("BubbleSort");
+        //     await Sleep(this.delay);
+        // }
     }
 
     stop = () => {
+        console.log("Stop");
         this.run = false;
     }
 
     setDelay = (delay: number) => {
+        console.log("Set delay = " + delay);
         this.delay = delay;
     }
 

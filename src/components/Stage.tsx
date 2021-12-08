@@ -1,5 +1,5 @@
 import React from "react";
-import {SortingContext, SortingContextType} from '../contexts/SortingContext';
+import {SortingContext} from '../contexts/SortingContext';
 import './Stage.css'
 
 interface IProps  {
@@ -40,13 +40,14 @@ class Stage extends React.Component<IProps, IState> {
   }
 
   render() {
-    const elemWidth = `${this.state.width/(this.context.sorting.array.length)/2}px`;
+    const elemWidth = `${this.state.width/(this.context.arrayData.array.length)/2}px`;
+    const fontSize = `${this.state.width/(this.context.arrayData.array.length)/6}px`;
     const bgColor = '#189AB4';
     const bgColorComp = "#05445E";
 
     return(
         <div id="container">
-            {this.context.sorting.array.map( (el: any, index: number) => 
+            {this.context.arrayData.array.map( (el: any, index: number) => 
                 <div 
                   className="arrayElement" 
                   key={index}
@@ -55,8 +56,8 @@ class Stage extends React.Component<IProps, IState> {
                     width: elemWidth, 
                     marginLeft: '2px', 
                     marginRight: '2px',
-                    backgroundColor: ( index === this.context.sorting.compareElements[0] || index === this.context.sorting.compareElements[1] ? bgColorComp: bgColor),
-                    fontSize: '4px'  } } >
+                    backgroundColor: ( index === this.context.arrayData.compareElements[0] || index === this.context.arrayData.compareElements[1] ? bgColorComp: bgColor),
+                    fontSize: fontSize } } >
                   {el}
                 </div>
             )}
