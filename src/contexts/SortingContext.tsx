@@ -1,6 +1,8 @@
 import React, { createContext, useEffect, useState } from 'react';
 import ISortingAlgorithm from '../algorithms/ISortingAlgorithm';
 import BubbleSort from '../algorithms/BubbleSort';
+import HeapSort from '../algorithms/HeapSort';
+import { stat } from 'fs';
 
 export interface SortingArrayData {
     array: number[],
@@ -59,17 +61,39 @@ const SortingProvider = (props: any) => {
     }
 
     const startStop = async () => {
-        if(!status.running) 
-            setSortingAlg(new BubbleSort());
-        else
+        let alg: ISortingAlgorithm;
+        if(!status.running) {
+            switch(status.algorithm) {
+                case 'HeapSort':
+                    alg = new HeapSort();
+                    break;
+
+                case 'MergeSort':
+                    alg = new BubbleSort();
+                    break;
+                
+                case 'QuickSort':
+                    alg = new BubbleSort();
+                    break;
+
+                case 'BubbleSort':
+                default:
+                    alg = new BubbleSort();
+                    break;
+            }
+            setSortingAlg(alg);
+        } else
             sortingAlg.stop();
         setStatus(  { ...status, running: !status.running}); 
     }
 
     useEffect( () => {
         if(status.running) {
-            sortingAlg.start(arrayData.array, status.delay, async (array: number[], compareElements: number[]) => {
+            sortingAlg.setDelay(status.delay);
+            sortingAlg.start(arrayData.array, async (array: number[], compareElements: number[]) => {
                 setArrayData({ array, compareElements});
+            }, () => {
+                setStatus( { ...status, running: false});
             });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

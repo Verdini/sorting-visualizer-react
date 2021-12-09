@@ -61,8 +61,8 @@ class Navbar extends React.Component<IProps, IState> {
               <select className="select-dropdown" value={this.context.status.algorithm} onChange={this.handleAlgorithmChange}>
                 <option value="BubbleSort">Bubble Sort</option>
                 <option value="HeapSort">Heap Sort</option>
-                <option value="MergeSort">Merge Sort</option>
-                <option value="QuickSort">Quick Sort</option>
+                {/*<option value="MergeSort">Merge Sort</option>
+                <option value="QuickSort">Quick Sort</option>*/}
               </select>
             </div>
             <div style={{ display: "inline-block"} }>

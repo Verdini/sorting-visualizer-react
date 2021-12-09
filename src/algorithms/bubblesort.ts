@@ -12,10 +12,9 @@ export default class BubbleSort implements ISortingAlgorithm {
         this.delay = 10;
     }
 
-    start = async (array: number[], delay: number, onStateChange: (array: number[], compareElements: number[]) => void) => {
+    start = async (array: number[], onStateChange: (array: number[], compareElements: number[]) => void, onFinish: () => void) => {
         let sArray = [...array];
         var length = sArray.length;
-        this.delay = delay;  
         console.log("Start");
 
         outsideLoop:
@@ -38,6 +37,7 @@ export default class BubbleSort implements ISortingAlgorithm {
         }
         await Sleep(this.delay);
         onStateChange( sArray, [-1, -1] );
+        onFinish();
         // while(this.run === true) {
         //     console.log("BubbleSort");
         //     await Sleep(this.delay);
