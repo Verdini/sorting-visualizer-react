@@ -2,6 +2,7 @@
   "name": "sorting-visualizer-react",
   "version": "0.1.0",
   "private": true,
+  "homepage": "/sorting-visualizer-react",
   "devDependencies": {
     "react-scripts": "^3.4.4"
   },
