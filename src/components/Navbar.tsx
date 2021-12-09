@@ -52,10 +52,10 @@ class Navbar extends React.Component<IProps, IState> {
     return (
         <div id="navbar">
             <div style={{ display: "inline-block"} }>
-              <label>Colleciton size: </label>
+              <label>Collection size: </label>
               <input type="range" min="5" max="100" value={this.state.arraySize} onChange={this.handleSizeChange}/>
             </div>
-            <button className="button" onClick={this.handleResetArray}>Generate new collection</button>
+            <button className="button" onClick={this.handleResetArray}>New collection</button>
             <div style={{ display: "inline-block"} }>
               <label>Select algorithm: </label>
               <select className="select-dropdown" value={this.context.status.algorithm} onChange={this.handleAlgorithmChange}>
