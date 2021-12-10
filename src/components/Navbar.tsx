@@ -27,10 +27,7 @@ class Navbar extends React.Component<IProps, IState> {
 
   handleSizeChange = (event: React.FormEvent<HTMLInputElement>) => {
     this.setState({ ...this.state, arraySize: Number(event.currentTarget.value)});
-  }
-  
-  handleResetArray = () => {
-      this.context.resetArray(this.state.arraySize);
+    this.context.resetArray( Number(event.currentTarget.value));
   }
 
   handleAlgorithmChange = (event: React.FormEvent<HTMLSelectElement>) => {
@@ -55,7 +52,6 @@ class Navbar extends React.Component<IProps, IState> {
               <label>Collection size: </label>
               <input type="range" min="5" max="100" value={this.state.arraySize} onChange={this.handleSizeChange}/>
             </div>
-            <button className="button" onClick={this.handleResetArray}>New collection</button>
             <div style={{ display: "inline-block"} }>
               <label>Select algorithm: </label>
               <select className="select-dropdown" value={this.context.status.algorithm} onChange={this.handleAlgorithmChange}>

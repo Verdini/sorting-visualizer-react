@@ -11,7 +11,7 @@
     gap: 2rem;
 }
 
-@media screen and (max-width: 940px) {
+@media screen and (max-width: 1024px) {
   #navbar {
     height: auto;
     width: 100%;
@@ -19,7 +19,7 @@
     flex-wrap: wrap;
     flex-direction: row;
     justify-content: center;
-    padding: 10px;
+    padding: 2rem;
   }
 }
 
@@ -33,7 +33,7 @@
     color: #24292E;
     cursor: pointer;
     display: inline-block;
-    font-size: 14px;
+    font-size: 1rem;
     font-weight: 500;
     line-height: 20px;
     list-style: none;

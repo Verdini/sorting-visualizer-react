@@ -41,7 +41,7 @@ class Stage extends React.Component<IProps, IState> {
 
   render() {
     const elemWidth = `${this.state.width/(this.context.arrayData.array.length)/2}px`;
-    const fontSize = `${this.state.width/(this.context.arrayData.array.length)/6}px`;
+    const fontSize = `${this.state.width/(this.context.arrayData.array.length)/120}rem`;
     const bgColor = '#189AB4';
     const bgColorComp = "#05445E";
 
@@ -54,8 +54,8 @@ class Stage extends React.Component<IProps, IState> {
                   style={ { 
                     height: `${el*6}px`, 
                     width: elemWidth, 
-                    marginLeft: '2px', 
-                    marginRight: '2px',
+                    marginLeft: '0.1rem', 
+                    marginRight: '0.1rem',
                     backgroundColor: ( index === this.context.arrayData.compareElements[0] || index === this.context.arrayData.compareElements[1] ? bgColorComp: bgColor),
                     fontSize: fontSize } } >
                   {el}
