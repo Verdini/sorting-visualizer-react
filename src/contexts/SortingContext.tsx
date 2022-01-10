@@ -2,7 +2,6 @@ import React, { createContext, useEffect, useState } from 'react';
 import ISortingAlgorithm from '../algorithms/ISortingAlgorithm';
 import BubbleSort from '../algorithms/BubbleSort';
 import HeapSort from '../algorithms/HeapSort';
-import { stat } from 'fs';
 
 export interface SortingArrayData {
     array: number[],

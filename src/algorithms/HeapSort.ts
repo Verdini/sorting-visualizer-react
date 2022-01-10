@@ -26,7 +26,7 @@ export default class HeapSort implements ISortingAlgorithm {
         // Continue heap sorting until we have
         // One element left
         while (lastElement > 0) {
-            if(this.run == false ) break;
+            if(this.run === false ) break;
             await this.swap(sArray, 0, lastElement);
             await this.heapify(sArray, 0, lastElement);
             lastElement -= 1;
@@ -52,7 +52,7 @@ export default class HeapSort implements ISortingAlgorithm {
         // Build a max heap out of
         // All array elements passed in
         while (i >= 0) {
-            if(this.run == false ) break;
+            if(this.run === false ) break;
             await this.heapify(arr, i, arr.length);
             i -= 1;
         }
@@ -64,7 +64,7 @@ export default class HeapSort implements ISortingAlgorithm {
         let rightChild: number;
       
         while (i < max) {
-            if(this.run == false ) break;
+            if(this.run === false ) break;
           index = i;
           leftChild = 2 * i + 1;
           rightChild = leftChild + 1;
