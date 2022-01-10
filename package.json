@@ -2,7 +2,7 @@
   "name": "sorting-visualizer-react",
   "version": "0.1.0",
   "private": true,
-  "homepage": "/sorting-visualizer-react",
+  "homepage": "/",
   "devDependencies": {
     "react-scripts": "^3.4.4",
     "@testing-library/jest-dom": "^5.11.4",
