@@ -1,71 +1,34 @@
-import React from "react";
-import {SortingContext} from '../contexts/SortingContext';
-import './Stage.css'
+import React, { useContext } from 'react';
+import { SortingContext } from '../contexts/SortingContext';
+import './Stage.css';
 
-interface IProps  {
-  // arrayData: Number[],
-  // compareElements: Number[]
-}
+const Stage: React.FC = () => {
+  const [state] = useContext(SortingContext);
 
-interface IState {
-    width: number,
-    height: number
-}
-
-class Stage extends React.Component<IProps, IState> {
-  static contextType = SortingContext;
-  context!: React.ContextType<typeof SortingContext>;
-
-  constructor(props: IProps) {
-    super(props);
-    this.state = {
-      width: window.innerWidth,
-      height: window.innerHeight
-    }
-  }
-
-  handleResize = () => {
-    this.setState({
-      width: window.innerWidth,
-      height: window.innerHeight
-    });
-  }
-
-  componentDidMount() {
-      window.addEventListener('resize', this.handleResize);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResize)
-  }
-
-  render() {
-    const elemWidth = `${this.state.width/(this.context.arrayData.array.length)/2}px`;
-    const fontSize = `${this.state.width/(this.context.arrayData.array.length)/120}rem`;
-    const bgColor = '#189AB4';
-    const bgColorComp = "#05445E";
-
-    return(
-        <div id="container">
-            {this.context.arrayData.array.map( (el: any, index: number) => 
-                <div 
-                  className="arrayElement" 
-                  key={index}
-                  style={ { 
-                    height: `${el*6}px`, 
-                    width: elemWidth, 
-                    marginLeft: '0.1rem', 
-                    marginRight: '0.1rem',
-                    backgroundColor: ( index === this.context.arrayData.compareElements[0] || index === this.context.arrayData.compareElements[1] ? bgColorComp: bgColor),
-                    fontSize: fontSize } } >
-                  {el}
-                </div>
-            )}
+  return (
+    <div id="container">
+      {state.arrayData.map((el: any, index: number) => (
+        <div
+          className="arrayElement"
+          // eslint-disable-next-line react/no-array-index-key
+          key={index}
+          style={{
+            height: `${el * 6}px`,
+            width: `${window.innerWidth / (state.arrayData.length) / 2}px`,
+            marginLeft: '0.1rem',
+            marginRight: '0.1rem',
+            backgroundColor: (
+              index === state.compareElements[0] || index === state.compareElements[1]
+                ? '#05445E'
+                : '#189AB4'),
+            fontSize: `${window.innerWidth / (state.arrayData.length) / 120}rem`,
+          }}
+        >
+          {el}
         </div>
-    );
-
-  }
-
-}
+      ))}
+    </div>
+  );
+};
 
 export default Stage;

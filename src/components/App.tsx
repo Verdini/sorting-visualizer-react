@@ -1,30 +1,16 @@
 import React from 'react';
 import Navbar from './Navbar';
 import Stage from './Stage';
-import SortingContext from '../contexts/SortingContext';
-import './App.css'
+import SortingContextProvider from '../contexts/SortingContext';
+import './App.css';
 
-
-interface IProps  {
-
-}
-
-interface IState {
-
-}
-
-class App extends React.Component<IProps, IState> {
-  render() {
-    return (
-      <SortingContext>
-        <div className="App">
-          <Navbar/>
-          <Stage/>
-        </div>
-      </SortingContext>
-    );
-  }
-  
-}
+const App: React.FC = () => (
+  <SortingContextProvider>
+    <div className="App">
+      <Navbar />
+      <Stage />
+    </div>
+  </SortingContextProvider>
+);
 
 export default App;

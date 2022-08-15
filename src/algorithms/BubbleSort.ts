@@ -1,59 +1,50 @@
 import Sleep from '../utils/Sleep';
 import ISortingAlgorithm from './ISortingAlgorithm';
 
-
 export default class BubbleSort implements ISortingAlgorithm {
+  run: boolean;
 
-    run: boolean;
-    delay: number;
+  delay: number;
 
-    constructor() {
-        this.run = true;
-        this.delay = 10;
-    }
+  constructor() {
+    this.run = true;
+    this.delay = 10;
+  }
 
-    start = async (array: number[], onStateChange: (array: number[], compareElements: number[]) => void, onFinish: () => void) => {
-        let sArray = [...array];
-        var length = sArray.length;
-        console.log("Start");
+  start = async (
+    array: number[],
+    onStateChange: (array: number[], compareElements: number[]) => void,
+    onFinish: () => void,
+  ) => {
+    const sArray = [...array];
+    const { length } = sArray;
 
-        outsideLoop:
-        for (var i = 0; i < length; i++) { 
-            for (var j = 0; j < (length - i - 1); j++) { 
+    outsideLoop:
+    for (let i = 0; i < length; i++) {
+      for (let j = 0; j < (length - i - 1); j++) {
+        if (this.run === false) { break outsideLoop; }
 
-                if(this.run === false)
-                    break outsideLoop;
-
-                await Sleep(this.delay);
-                onStateChange( sArray, [j, j+1] );
-                if(sArray[j] > sArray[j+1]) {           
-                    var tmp = sArray[j]; 
-                    sArray[j] = sArray[j+1]; 
-                    sArray[j+1] = tmp; 
-                    await Sleep(this.delay);
-                    onStateChange( sArray, [j, j+1] );
-                }
-            }        
-        }
         await Sleep(this.delay);
-        onStateChange( sArray, [-1, -1] );
-        onFinish();
-        // while(this.run === true) {
-        //     console.log("BubbleSort");
-        //     await Sleep(this.delay);
-        // }
+        onStateChange(sArray, [j, j + 1]);
+        if (sArray[j] > sArray[j + 1]) {
+          const tmp = sArray[j];
+          sArray[j] = sArray[j + 1];
+          sArray[j + 1] = tmp;
+          await Sleep(this.delay);
+          onStateChange(sArray, [j, j + 1]);
+        }
+      }
     }
+    await Sleep(this.delay);
+    onStateChange(sArray, [-1, -1]);
+    onFinish();
+  };
 
-    stop = () => {
-        console.log("Stop");
-        this.run = false;
-    }
+  stop = () => {
+    this.run = false;
+  };
 
-    setDelay = (delay: number) => {
-        console.log("Set delay = " + delay);
-        this.delay = delay;
-    }
-
+  setDelay = (delay: number) => {
+    this.delay = delay;
+  };
 }
-
-

@@ -1,0 +1,24 @@
+{
+  "extends": [
+    "airbnb",
+    "airbnb-typescript"
+  ],
+  "parserOptions":
+  {
+    "project": "tsconfig.json"
+  },
+  "rules": {
+    "react/function-component-definition": [
+      "error",
+      {
+        "namedComponents": ["arrow-function", "function-declaration"],
+        "unnamedComponents": "arrow-function"
+      }
+    ],
+    "no-bitwise": "off",
+    "no-await-in-loop": "off",
+    "no-labels": "off",
+    "no-restricted-syntax": "off",
+    "no-plusplus": "off"
+  }
+}

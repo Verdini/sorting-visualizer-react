@@ -1,76 +1,71 @@
-import React from "react";
-import {SortingContext} from '../contexts/SortingContext';
-import './Navbar.css'
+import React, { useState, useContext } from 'react';
+import AlgorithmType from '../algorithms/Types';
+import { SortingContext, ActionTypes } from '../contexts/SortingContext';
+import './Navbar.css';
 
-interface IProps  {
-  // onResetArray: any,
-  // onSortArray: any,
-  // onChangeSpeed: any
-}
+const Navbar: React.FC = () => {
+  const [state, dispatch] = useContext(SortingContext);
 
-interface IState {
-    arraySize: number,
-    speed: number
-}
+  const [arraySize, setArraySize] = useState(100);
+  const [sortingSpeed, setSortingSpeed] = useState(100);
+  const [algorithm, setAlgorithm] = useState(AlgorithmType.BUBBLE_SORT);
 
-class Navbar extends React.Component<IProps, IState> {
-  static contextType = SortingContext;
-  context!: React.ContextType<typeof SortingContext>;
+  const handleSizeChange = (event: React.FormEvent<HTMLInputElement>) => {
+    setArraySize(Number(event.currentTarget.value));
+    dispatch({
+      type: ActionTypes.SET_COLLECTION_SIZE,
+      payload: +event.currentTarget.value,
+    });
+  };
 
-  constructor(props: IProps) {
-    super(props);
-    this.state = {
-      arraySize: 100,
-      speed: 100
-    }
-  }
+  const handleAlgorithmChange = (event: React.FormEvent<HTMLSelectElement>) => {
+    setAlgorithm(+event.currentTarget.value);
+    dispatch({
+      type: ActionTypes.SET_ALGORITHM,
+      payload: +event.currentTarget.value,
+    });
+  };
 
-  handleSizeChange = (event: React.FormEvent<HTMLInputElement>) => {
-    this.setState({ ...this.state, arraySize: Number(event.currentTarget.value)});
-    this.context.resetArray( Number(event.currentTarget.value));
-  }
+  const handleSpeedChange = (event: React.FormEvent<HTMLInputElement>) => {
+    setSortingSpeed(Number(event.currentTarget.value));
+    const speed = Number(event.currentTarget.value);
+    const delay = ~~((1000) * Math.exp(-0.0461 * speed));
+    dispatch({
+      type: ActionTypes.SET_DELAY,
+      payload: delay,
+    });
+  };
 
-  handleAlgorithmChange = (event: React.FormEvent<HTMLSelectElement>) => {
-    this.context.setAlgorithm(event.currentTarget.value);
-  }
+  const handleStartStop = async () => {
+    dispatch({
+      type: ActionTypes.START_STOP,
+    });
+  };
 
-  handleSpeedChange = (event: React.FormEvent<HTMLInputElement>) => {
-    this.setState({ ...this.state, speed: Number(event.currentTarget.value)});
-    let speed = Number(event.currentTarget.value);
-    let delay = ~~((1000)*Math.exp(-0.0461*speed));
-    this.context.setSortingDelay(delay);
-  }
-
-  handleSort = async () => {
-    this.context.startStop();  
-  }
-
-  render() {
-    return (
-        <div id="navbar">
-            <div style={{ display: "inline-block"} }>
-              <label>Collection size: </label>
-              <input type="range" min="5" max="100" value={this.state.arraySize} onChange={this.handleSizeChange}/>
-            </div>
-            <div style={{ display: "inline-block"} }>
-              <label>Select algorithm: </label>
-              <select className="select-dropdown" value={this.context.status.algorithm} onChange={this.handleAlgorithmChange}>
-                <option value="BubbleSort">Bubble Sort</option>
-                <option value="HeapSort">Heap Sort</option>
-                {/*<option value="MergeSort">Merge Sort</option>
-                <option value="QuickSort">Quick Sort</option>*/}
-              </select>
-            </div>
-            <div style={{ display: "inline-block"} }>
-              <label>Speed: </label>
-              <input type="range" min="1" max="100" value={this.state.speed} onChange={this.handleSpeedChange}/>
-            </div>
-            <button className="button" onClick={this.handleSort}>{this.context.status.running? 'Stop Sorting' : 'Start Sorting' }</button>
-        </div>
-    );
-
-  }
-
-}
+  return (
+    <div id="navbar">
+      <label htmlFor="size">
+        Collection size:
+        <input id="size" type="range" min="5" max="100" value={arraySize} onChange={handleSizeChange} />
+      </label>
+      <label htmlFor="algorithm">
+        Select algorithm:
+        <select id="algorithm" className="select-dropdown" value={algorithm} onChange={handleAlgorithmChange}>
+          <option value={AlgorithmType.BUBBLE_SORT}>Bubble Sort</option>
+          <option value={AlgorithmType.HEAP_SORT}>Heap Sort</option>
+          {/* <option value="MergeSort">Merge Sort</option>
+            <option value="QuickSort">Quick Sort</option> */}
+        </select>
+      </label>
+      <label htmlFor="speed">
+        Speed:
+        <input id="speed" type="range" min="1" max="100" value={sortingSpeed} onChange={handleSpeedChange} />
+      </label>
+      <button type="submit" className="button" onClick={handleStartStop}>
+        {state.running ? 'Stop Sorting' : 'Start Sorting' }
+      </button>
+    </div>
+  );
+};
 
 export default Navbar;

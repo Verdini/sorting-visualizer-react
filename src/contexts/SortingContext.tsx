@@ -1,109 +1,172 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useReducer } from 'react';
 import ISortingAlgorithm from '../algorithms/ISortingAlgorithm';
 import BubbleSort from '../algorithms/BubbleSort';
 import HeapSort from '../algorithms/HeapSort';
+import AlgorithmType from '../algorithms/Types';
 
-export interface SortingArrayData {
-    array: number[],
-    compareElements: number[]
+export enum ActionTypes {
+  SET_COLLECTION_SIZE,
+  SET_ALGORITHM,
+  SET_DELAY,
+  SET_ARRAY,
+  SET_RUNNING,
+  START_STOP,
+}
+interface IState {
+  arrayData: number[],
+  compareElements: number[],
+  running: boolean,
+  delay: number,
+  algorithm: AlgorithmType
 }
 
-export interface SortingStatus {
-    running: boolean,
-    delay: number,
-    algorithm: string
+interface IAction {
+  type: ActionTypes,
+  payload?: any,
 }
-
-export interface SortingContextType {
-    arrayData: SortingArrayData,
-    status: SortingStatus,
-    resetArray(size: number): void,
-    setAlgorithm(algorithm: string): void
-    setSortingDelay(delay: number): void
-    startStop(): void,
-} 
-
-export const SortingContext = createContext<SortingContextType>({
-    arrayData: { array: [], compareElements: []},
-    status: { running: false, delay: 10, algorithm: 'BubbleSort'},
-    resetArray: () => {},
-    setAlgorithm: () => {},
-    setSortingDelay: () => {},
-    startStop: () => {}
-});
 
 function generateArray(size: number): number[] {
-    return [...Array(size)].map(() => ~~(1 + Math.random() * 100) );
+  return [...Array(size)].map(() => ~~(1 + Math.random() * 100));
 }
 
-const SortingProvider = (props: any) => {
-    const [arrayData, setArrayData] = useState<SortingArrayData>({ array: generateArray(100), compareElements: [-1, -1]});
-    const [status, setStatus] = useState<SortingStatus>({ running: false, delay: 10, algorithm: 'BubbleSort' });
-    const [sortingAlg, setSortingAlg] = useState<ISortingAlgorithm>(new BubbleSort());
+let sortAgent: ISortingAlgorithm;
 
-    const resetArray = (size: number) => {
-        if(!status.running)
-            setArrayData({ ...arrayData, 
-                array: generateArray(size),
-                compareElements: [-1, -1]
-            });
+const initialState: IState = {
+  arrayData: generateArray(100),
+  compareElements: [-1, -1],
+  running: false,
+  delay: 10,
+  algorithm: AlgorithmType.BUBBLE_SORT,
+};
+
+export const SortingContext = createContext<[IState, React.Dispatch<any>]>(
+  [initialState, () => null],
+);
+
+const setCollectionSize = (state: IState, payload: any) => {
+  if (!state.running) {
+    return {
+      ...state,
+      arrayData: generateArray(payload),
+      compareElements: [-1, -1],
+    };
+  }
+  return state;
+};
+
+const setAlgorithm = (state: IState, payload: any) => ({
+  ...state,
+  algorithm: payload,
+});
+
+const setDelay = (state: IState, payload: any) => {
+  if (state.running) sortAgent.setDelay(payload);
+  return {
+    ...state,
+    delay: payload,
+  };
+};
+
+const setArray = (state: IState, payload: any): IState => ({
+  ...state,
+  arrayData: payload.arrayData,
+  compareElements: payload.compareElements,
+});
+
+const setRunning = (state: IState, payload: any): IState => ({
+  ...state,
+  running: payload,
+});
+
+const startStop = (state: IState, dispatch: React.Dispatch<IAction>) => {
+  if (state.running) {
+    sortAgent.stop();
+    dispatch({
+      type: ActionTypes.SET_RUNNING,
+      payload: false,
+    });
+  } else {
+    switch (state.algorithm) {
+      case AlgorithmType.HEAP_SORT:
+        sortAgent = new HeapSort();
+        break;
+      case AlgorithmType.BUBBLE_SORT:
+      default:
+        sortAgent = new BubbleSort();
+        break;
     }
 
-    const setAlgorithm = (algorithm : string) => {
-        setStatus( { ...status, algorithm });
-    }
-
-    const setSortingDelay = (delay: number) => {
-        setStatus({ ...status, delay: delay});
-        if(sortingAlg)
-            sortingAlg.setDelay(delay);
-    }
-
-    const startStop = async () => {
-        let alg: ISortingAlgorithm;
-        if(!status.running) {
-            switch(status.algorithm) {
-                case 'HeapSort':
-                    alg = new HeapSort();
-                    break;
-
-                case 'MergeSort':
-                    alg = new BubbleSort();
-                    break;
-                
-                case 'QuickSort':
-                    alg = new BubbleSort();
-                    break;
-
-                case 'BubbleSort':
-                default:
-                    alg = new BubbleSort();
-                    break;
-            }
-            setSortingAlg(alg);
-        } else
-            sortingAlg.stop();
-        setStatus(  { ...status, running: !status.running}); 
-    }
-
-    useEffect( () => {
-        if(status.running) {
-            sortingAlg.setDelay(status.delay);
-            sortingAlg.start(arrayData.array, async (array: number[], compareElements: number[]) => {
-                setArrayData({ array, compareElements});
-            }, () => {
-                setStatus( { ...status, running: false});
-            });
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [sortingAlg]);
-
-
-    return(
-        <SortingContext.Provider value={ {arrayData, status, resetArray, setAlgorithm, setSortingDelay, startStop} }>
-            {props.children}
-        </SortingContext.Provider>
+    sortAgent.setDelay(state.delay);
+    sortAgent.start(
+      state.arrayData,
+      (arrayData: number[], compareElements: number[]) => {
+        dispatch({
+          type: ActionTypes.SET_ARRAY,
+          payload: {
+            arrayData,
+            compareElements,
+          },
+        });
+      },
+      () => {
+        dispatch({
+          type: ActionTypes.SET_RUNNING,
+          payload: false,
+        });
+      },
     );
+    dispatch({
+      type: ActionTypes.SET_RUNNING,
+      payload: true,
+    });
+  }
+};
+
+const reducer = (state: IState, action: IAction): IState => {
+  switch (action.type) {
+    case ActionTypes.SET_COLLECTION_SIZE:
+      return setCollectionSize(state, action.payload);
+    case ActionTypes.SET_ALGORITHM:
+      return setAlgorithm(state, action.payload);
+    case ActionTypes.SET_DELAY:
+      return setDelay(state, action.payload);
+    case ActionTypes.SET_ARRAY:
+      return setArray(state, action.payload);
+    case ActionTypes.SET_RUNNING:
+      return setRunning(state, action.payload);
+    default:
+      return state;
+  }
+};
+
+const dispatchMiddleware = (
+  state: IState,
+  dispatch: React.Dispatch<IAction>,
+): React.Dispatch<IAction> => (
+  action: IAction,
+) => {
+  switch (action.type) {
+    case ActionTypes.START_STOP:
+      startStop(state, dispatch);
+      return null;
+    default:
+      return dispatch(action);
+  }
+};
+
+interface SortingContextProviderProps {
+  children: React.ReactNode
 }
 
-export default SortingProvider;
+const SortingContextProvider: React.FC<SortingContextProviderProps> = ({ children }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  return (
+    // eslint-disable-next-line react/jsx-no-constructed-context-values
+    <SortingContext.Provider value={[state, dispatchMiddleware(state, dispatch)]}>
+      {children}
+    </SortingContext.Provider>
+  );
+};
+
+export default SortingContextProvider;
